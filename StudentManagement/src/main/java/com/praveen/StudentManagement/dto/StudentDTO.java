@@ -1,59 +1,31 @@
 package com.praveen.StudentManagement.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonPropertyOrder({
+        "id",
         "name",
         "branch",
+        "phoneNumber",
         "mathsMarks",
         "scienceMarks",
         "englishMarks"
 })
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StudentDTO {
 
+    private Long id;
     private String name;
     private String branch;
-    private Integer mathsMarks;
-    private Integer scienceMarks;
-    private Integer englishMarks;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getBranch() {
-        return branch;
-    }
-
-    public void setBranch(String branch) {
-        this.branch = branch;
-    }
-
-    public Integer getMathsMarks() {
-        return mathsMarks;
-    }
-
-    public void setMathsMarks(Integer mathsMarks) {
-        this.mathsMarks = mathsMarks;
-    }
-
-    public Integer getScienceMarks() {
-        return scienceMarks;
-    }
-
-    public void setScienceMarks(Integer scienceMarks) {
-        this.scienceMarks = scienceMarks;
-    }
-
-    public Integer getEnglishMarks() {
-        return englishMarks;
-    }
-
-    public void setEnglishMarks(Integer englishMarks) {
-        this.englishMarks = englishMarks;
-    }
+    private Long mathsMarks;
+    private Long scienceMarks;
+    private Long englishMarks;
+    private String phoneNumber;
 }

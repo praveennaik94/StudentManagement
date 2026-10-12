@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -45,17 +46,17 @@ public class StudentService {
                 .toList();
     }
 
-    public StudentDTO getStudentById(Integer id) {
-
+    public StudentDTO getStudentById(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() ->
                         new StudentNotFoundException(
-                                "Student not found with id: " + id));
+                                "Student not found with ID: " + id
+                        ));
 
         return modelMapper.map(student, StudentDTO.class);
     }
 
-    public Student updateStudent(Integer id, Student student) {
+    public Student updateStudent(Long id, Student student) {
 
         Student existing = studentRepository.findById(id)
                 .orElseThrow(() ->
@@ -66,6 +67,7 @@ public class StudentService {
 
         existing.setName(student.getName());
         existing.setBranch(student.getBranch());
+        existing.setPhoneNumber(student.getPhoneNumber());
         existing.setMathsMarks(student.getMathsMarks());
         existing.setScienceMarks(student.getScienceMarks());
         existing.setEnglishMarks(student.getEnglishMarks());
@@ -73,7 +75,7 @@ public class StudentService {
         return studentRepository.save(existing);
     }
 
-    public void deleteStudent(int id) {
+    public void deleteStudent(Long id) {
 
         if (!studentRepository.existsById(id)) {
             throw new StudentNotFoundException(
@@ -84,7 +86,7 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public Student patchStudent(Integer id, Student student) {
+    public Student patchStudent(Long id, Student student) {
 
         Student existing = studentRepository.findById(id)
                 .orElseThrow(() ->
@@ -114,7 +116,7 @@ public class StudentService {
         return studentRepository.save(existing);
     }
 
-    public double getAverage(Integer id) {
+    public double getAverage(Long id) {
 
         Student student = studentRepository.findById(id)
                 .orElseThrow(() ->
@@ -135,7 +137,9 @@ public class StudentService {
                 .filter(student -> calculateAverage(student) > 80)
                 .map(student -> new StudentAverageDTO(
                         student.getId(),
-                        student.getName(),
+                         student.getName(),
+                        student.getBranch(),
+                        student.getPhoneNumber(),
                         calculateAverage(student)
                 ))
                 .toList();
@@ -146,6 +150,30 @@ public class StudentService {
         return (student.getMathsMarks()
                 + student.getScienceMarks()
                 + student.getEnglishMarks()) / 3.0;
+    }
+
+    public List<StudentDTO> getStudentByName(String name) {
+        return studentRepository.findByName(name)
+                .stream()
+                .map(student -> modelMapper.map(student, StudentDTO.class))
+                .toList();
+    }
+
+    public StudentAverageDTO getHighestAverageByName(String name) {
+
+        Student student = studentRepository.findByName(name)
+                .stream()
+                .max(Comparator.comparingDouble(this::calculateAverage))
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student not found with name: " + name));
+
+        StudentAverageDTO dto =
+                modelMapper.map(student, StudentAverageDTO.class);
+
+        dto.setAverage(calculateAverage(student));
+
+        return dto;
     }
 }
 

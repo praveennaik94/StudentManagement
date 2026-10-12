@@ -6,37 +6,37 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(
-        indexes = {
-                @Index(name = "idx_student_name", columnList = "name")
-        }
-)
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String name;
     private String branch;
-    private int mathsMarks;
-    private int scienceMarks;
-    private int englishMarks;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    private Long mathsMarks;
+    private Long scienceMarks;
+    private Long englishMarks;
 
     @ManyToMany
-    @JoinTable(
-            name = "student_courses",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
     private Set<Course> courses = new HashSet<>();
 
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-    public int getId() {
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -56,27 +56,58 @@ public class Student {
         this.branch = branch;
     }
 
-    public int getMathsMarks() {
+    public Long getMathsMarks() {
         return mathsMarks;
     }
 
-    public void setMathsMarks(int mathsMarks) {
+    public void setMathsMarks(Long mathsMarks) {
         this.mathsMarks = mathsMarks;
     }
 
-    public int getScienceMarks() {
+    public Long getScienceMarks() {
         return scienceMarks;
     }
 
-    public void setScienceMarks(int scienceMarks) {
+    public void setScienceMarks(Long scienceMarks) {
         this.scienceMarks = scienceMarks;
     }
 
-    public int getEnglishMarks() {
+    public Long getEnglishMarks() {
         return englishMarks;
     }
 
-    public void setEnglishMarks(int englishMarks) {
+    public void setEnglishMarks(Long englishMarks) {
         this.englishMarks = englishMarks;
     }
 }
+
+//package com.praveen.StudentManagement.model;
+//
+//import jakarta.persistence.*;
+//
+//@Entity
+//@Table(
+//        name = "student",
+//        indexes = {
+//                @Index(
+//                        name = "idx_student_name_phone",
+//                        columnList = "name, phone_number"
+//                )
+//        }
+//)
+//public class Student {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//
+//    private String name;
+//    private String branch;
+//
+//    @Column(name = "phone_number")
+//    private String phoneNumber;
+//
+//    private Long mathsMarks;
+//    private Long scienceMarks;
+//    private Long englishMarks;
+//}

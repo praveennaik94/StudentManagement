@@ -40,20 +40,20 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Integer id){
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id){
 
         StudentDTO student = studentService.getStudentById(id);
         return ResponseEntity.ok(student);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Integer id, @RequestBody Student student){
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student student){
 
         return ResponseEntity.ok(studentService.updateStudent(id, student));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable int id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
 
         studentService.deleteStudent(id);
 
@@ -61,13 +61,13 @@ public class StudentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Student> partialUpdateStudent(@PathVariable Integer id, @RequestBody Student student){
+    public ResponseEntity<Student> partialUpdateStudent(@PathVariable Long id, @RequestBody Student student){
 
         return ResponseEntity.ok(studentService.patchStudent(id, student));
     }
 
     @GetMapping("/{id}/average")
-    public ResponseEntity<Double> getAverage(@PathVariable Integer id) {
+    public ResponseEntity<Double> getAverage(@PathVariable Long id) {
         return ResponseEntity.ok(studentService.getAverage(id));
     }
 
@@ -78,4 +78,19 @@ public class StudentController {
                 studentService.getStudentsWithAverage()
         );
     }
+    @GetMapping("/name")
+    public ResponseEntity<List<StudentDTO>> getStudentByName(
+            @RequestParam String name) {
+
+        return ResponseEntity.ok(studentService.getStudentByName(name));
+    }
+
+    @GetMapping("/highest-average")
+    public ResponseEntity<StudentAverageDTO> getHighestAverageByName(
+            @RequestParam String name) {
+
+        return ResponseEntity.ok(
+                studentService.getHighestAverageByName(name));
+    }
+
 }
